@@ -1,3 +1,4 @@
+//roleController.js
 import Role from '../Model/roleModel.js';
 import Employee from '../Model/employeeModel.js';
 
@@ -6,6 +7,33 @@ import Employee from '../Model/employeeModel.js';
 const createRole = async (req, res) => {
   try {
     const { role_name, dept_id, dept_name, inserted_by_name } = req.body;
+    // Validate required fields and empty spaces
+    if (!role_name || role_name.trim().length === 0) {
+      return res.status(400).json({ message: 'Role name is required' });
+    }
+    if (!dept_id || isNaN(dept_id)) {
+      return res.status(400).json({ message: 'Valid department ID is required' });
+    }
+    if (!dept_name || dept_name.trim().length === 0) {
+      return res.status(400).json({ message: 'Department name is required' });
+    }
+    if (!inserted_by_name || inserted_by_name.trim().length === 0) {
+      return res.status(400).json({ message: 'Inserted by name is required' });
+    }
+
+    // Validate role_name format
+    if (!/^\s*[A-Za-z][A-Za-z\s]*$/.test(role_name)) {
+      return res.status(400).json({ message: 'Role name should contain alphabets only' });
+    }
+
+    // Validate dept_id format (4-digit number starting with 2)
+    if (!/^2\d{3}$/.test(dept_id.toString())) {
+      return res.status(400).json({ message: 'Department ID should be a 4-digit number starting with 2' });
+    }
+    // Validate dept_name format (at least one alphabet and spaces only)
+    if (!/^\s*[A-Za-z][A-Za-z\s]*$/.test(dept_name)) {
+      return res.status(400).json({ message: 'Department name should contain alphabets only' });
+    }
 
     // Find the corresponding Employee document by name
     const insertedByEmployee = await Employee.findOne({ firstname: inserted_by_name });
@@ -36,6 +64,13 @@ const createRole = async (req, res) => {
 const getRoleById = async (req, res) => {
   try {
     const roleId = req.params.role_id;
+    // Validate role_id format (4-digit number starting with 1)
+    if (!roleId || isNaN(roleId)) {
+      return res.status(400).json({ message: 'Valid role ID is required' });
+    }
+    if (!/^1\d{3}$/.test(roleId.toString())) {
+      return res.status(400).json({ message: 'Role ID should be a 4-digit number starting with 1' });
+    }
     const role = await Role.findOne({ role_id: roleId });
     if (!role) {
       return res.status(404).json({ message: 'Role not found' });

@@ -1,3 +1,4 @@
+//employeeModel.js
 import { Schema, model } from 'mongoose';
 import autoIncrement from 'mongoose-auto-increment';
 import mongoose from 'mongoose';
