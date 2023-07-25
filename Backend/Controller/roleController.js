@@ -1,5 +1,74 @@
 //roleController.js
+// Controller/roleController.js
 import Role from '../Model/roleModel.js';
+import Employee from '../Model/employeeModel.js';
+import { formatSuccessResponse, formatErrorResponse } from '../Response/format.js';
+import { validationResult } from 'express-validator';
+
+// API to create a new role
+export const createRole = async (req, res) => {
+  try {
+    const { role_name, dept_id, dept_name, inserted_by_name } = req.body;
+
+    // Request validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Find the corresponding Employee document by name
+    const insertedByEmployee = await Employee.findOne({ firstname: inserted_by_name });
+    if (!insertedByEmployee) {
+      return res.status(404).json(formatErrorResponse('Employee not found'));
+    }
+
+    // Create a new Role document
+    const newRole = new Role({
+      role_name,
+      dept_id,
+      dept_name,
+      inserted_by: insertedByEmployee.firstname,
+      inserted_by_name,
+    });
+
+    // Save the new Role document to the database
+    const savedRole = await newRole.save();
+
+    // Send the saved Role as a formatted success response
+    res.status(201).json(formatSuccessResponse(savedRole));
+  } catch (err) {
+    // If there's an error, send a formatted error response
+    console.error('Error creating role:', err);
+    res.status(500).json(formatErrorResponse('Failed to create role'));
+  }
+};
+
+// Function to get a role by role ID
+export const getRoleById = async (req, res) => {
+  try {
+    const roleId = req.params.role_id;
+
+    // Request validation
+    if (!roleId || isNaN(roleId) || !/^1\d{3}$/.test(roleId.toString())) {
+      return res.status(400).json(formatErrorResponse('Valid role ID is required'));
+    }
+
+    // Find the Role document by its role_id in the database
+    const role = await Role.findOne({ role_id: roleId });
+    if (!role) {
+      return res.status(404).json(formatErrorResponse('Role not found'));
+    }
+
+    // Send the found Role as a formatted success response
+    res.status(200).json(formatSuccessResponse(role));
+  } catch (error) {
+    // If there's an error, send a formatted error response
+    console.error('Error fetching role:', error);
+    res.status(500).json(formatErrorResponse('Failed to fetch role'));
+  }
+};
+
+/*import Role from '../Model/roleModel.js';
 import Employee from '../Model/employeeModel.js';
 
 
@@ -83,4 +152,4 @@ const getRoleById = async (req, res) => {
 };
   
 
-export { createRole, getRoleById, };
+export { createRole, getRoleById, };*/

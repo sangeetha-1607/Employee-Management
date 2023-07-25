@@ -1,3 +1,4 @@
+//config file - MongoDB.js
 import mongoose from 'mongoose';
 
 const mongoURI = process.env.MONGODB_URI;
