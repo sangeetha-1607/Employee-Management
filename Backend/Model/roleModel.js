@@ -1,6 +1,6 @@
 //roleModel.js
 import { Schema, model, mongoose } from 'mongoose';
-import dbConnection from '../Config/MongoDB.js';
+//import dbConnection from '../Config/MongoDB.js';
 import autoIncrement from 'mongoose-auto-increment';
 
 // Assuming you have already created a mongoose connection
