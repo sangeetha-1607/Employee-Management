@@ -1,20 +1,12 @@
-//roleController.js
 // Controller/roleController.js
 import Role from '../Model/roleModel.js';
 import Employee from '../Model/employeeModel.js';
 import { formatSuccessResponse, formatErrorResponse } from '../Response/format.js';
-import { validationResult } from 'express-validator';
 
 // API to create a new role
 export const createRole = async (req, res) => {
   try {
     const { role_name, dept_id, dept_name, inserted_by_name } = req.body;
-
-    // Request validation
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
     // Find the corresponding Employee document by name
     const insertedByEmployee = await Employee.findOne({ firstname: inserted_by_name });
@@ -48,11 +40,6 @@ export const getRoleById = async (req, res) => {
   try {
     const roleId = req.params.role_id;
 
-    // Request validation
-    if (!roleId || isNaN(roleId) || !/^1\d{3}$/.test(roleId.toString())) {
-      return res.status(400).json(formatErrorResponse('Valid role ID is required'));
-    }
-
     // Find the Role document by its role_id in the database
     const role = await Role.findOne({ role_id: roleId });
     if (!role) {
@@ -67,6 +54,7 @@ export const getRoleById = async (req, res) => {
     res.status(500).json(formatErrorResponse('Failed to fetch role'));
   }
 };
+
 
 /*import Role from '../Model/roleModel.js';
 import Employee from '../Model/employeeModel.js';
