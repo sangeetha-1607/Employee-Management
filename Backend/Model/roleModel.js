@@ -7,14 +7,14 @@ import autoIncrement from 'mongoose-auto-increment';
 autoIncrement.initialize(mongoose.connection);
 
 const roleSchema = new Schema({
-  role_id: { type: Number, unique: true },
-  role_name: { type: String, },
-  dept_id: { type: Number, },
-  dept_name: { type: String, },
+  role_id: { type: Number, unique: true, index: true },
+  role_name: { type: String },
+  dept_id: { type: Number },
+  dept_name: { type: String },
   inserted_date: { type: Date, default: Date.now() },
   updated_date: { type: Date, default: Date.now() },
-  inserted_by: { type: String, ref: 'Employee', }, 
-  updated_by: { type: String, ref: 'Employee', }, 
+  inserted_by: { type: String, ref: 'Employee' }, 
+  updated_by: { type: String, ref: 'Employee' }, 
   is_active_flag: { type: Boolean, default: true }, 
 });
 

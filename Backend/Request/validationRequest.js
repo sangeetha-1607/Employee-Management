@@ -6,7 +6,7 @@ const validateCreateRole = async (req) => {
 const validations = [
   // Role name validation
   body('role_name').trim().notEmpty().withMessage('Role name is required')
-    .isAlpha().withMessage('Role name should contain alphabets only'),
+  .matches(/^[a-zA-Z\s]+$/).withMessage('Role name should contain alphabets only'),
 
   // Department ID validation
   body('dept_id').notEmpty().withMessage('Valid department ID is required')
@@ -16,7 +16,7 @@ const validations = [
 
   // Department name validation
   body('dept_name').trim().notEmpty().withMessage('Department name is required')
-    .isAlpha().withMessage('Department name should contain alphabets only'),
+  .matches(/^[a-zA-Z\s]+$/).withMessage('Department name should contain alphabets only'),
 
   // Inserted by name validation
   body('inserted_by_name').trim().notEmpty().withMessage('Inserted by name is required')
