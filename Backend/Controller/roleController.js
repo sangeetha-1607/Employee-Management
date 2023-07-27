@@ -1,10 +1,9 @@
-//roleController.js
 // Controller/roleController.js
 
 import Role from '../Model/roleModel.js';
 import Employee from '../Model/employeeModel.js';
-import { formatSuccessResponse, formatErrorResponse } from '../Response/format.js';
-import { validateCreateRole, validateGetRoleById } from '../Request/validation.js';
+import { formatSuccessResponse, formatErrorResponse } from '../Response/formatResponse.js';
+import { validateCreateRole, validateGetRoleById } from '../Request/validationRequest.js';
 // API to create a new role
 export const createRole = async (req, res) => {
   try {
